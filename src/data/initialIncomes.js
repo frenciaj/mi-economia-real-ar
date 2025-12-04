@@ -1,0 +1,20 @@
+export const initialIncomes = [
+  { id: 1, mes: "Agosto", monto: 3000, moneda: "USD", descripcion: "Ingreso", categoria: "Principal" },
+  { id: 2, mes: "Setiembre", monto: 3000, moneda: "USD", descripcion: "Ingreso", categoria: "Principal" },
+  { id: 3, mes: "Setiembre", monto: 299.26, moneda: "USD", descripcion: "Extra", categoria: "Otros" },
+  { id: 4, mes: "Octubre", monto: 2000, moneda: "USD", descripcion: "Ingreso", categoria: "Principal" },
+  { id: 5, mes: "Noviembre", monto: 600, moneda: "USD", descripcion: "Ingreso", categoria: "Principal" },
+  { id: 6, mes: "Noviembre", monto: 362.62, moneda: "USD", descripcion: "Extra", categoria: "Otros" },
+  { id: 7, mes: "Noviembre", monto: 405, moneda: "USD", descripcion: "Extra", categoria: "Otros" },
+  { id: 8, mes: "Noviembre", monto: 200, moneda: "USD", descripcion: "Extra", categoria: "Otros" },
+  { id: 9, mes: "Noviembre", monto: 400, moneda: "USD", descripcion: "Extra", categoria: "Otros" },
+  { id: 10, mes: "Noviembre", monto: 200, moneda: "USD", descripcion: "Extra", categoria: "Otros" },
+  { id: 11, mes: "Diciembre", monto: 200, moneda: "USD", descripcion: "Extra", categoria: "Otros" },
+  { id: 12, mes: "Diciembre", monto: 200, moneda: "USD", descripcion: "Extra", categoria: "Otros" },
+  { id: 13, mes: "Diciembre", monto: 400, moneda: "USD", descripcion: "Extra", categoria: "Otros" },
+  { id: 14, mes: "Diciembre", monto: 200, moneda: "USD", descripcion: "Extra", categoria: "Otros" },
+  { id: 15, mes: "Diciembre", monto: 2200, moneda: "USD", descripcion: "Aguinaldo", categoria: "Principal" },
+  { id: 16, mes: "Diciembre", monto: 200, moneda: "USD", descripcion: "Extra", categoria: "Otros" },
+  { id: 17, mes: "Diciembre", monto: 450, moneda: "USD", descripcion: "Extra", categoria: "Otros" },
+  { id: 18, mes: "Diciembre", monto: 200, moneda: "USD", descripcion: "Extra", categoria: "Otros" }
+]
