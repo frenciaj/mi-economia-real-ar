@@ -1,43 +1,42 @@
-import { Plus, Edit2, Trash2 } from 'lucide-react'
-import { useStore } from '../App'
-import toast from 'react-hot-toast'
+import { Trash2 } from 'lucide-react';
+import { useStore } from '../App';
+import { useSwipeable } from 'react-swipeable';
 
-export function IncomeTab() {
-  const { ingresos, addIngreso, deleteIngreso } = useStore()
+const IncomeTab = () => {
+  const { ingresos, addIngreso, deleteItem } = useStore();
 
   const handleAdd = () => {
-    const desc = prompt('Descripción')
-    const monto = parseFloat(prompt('Monto (USD)') || 0)
-    if (desc && monto > 0) {
-      addIngreso({ descripcion: desc, monto, moneda: 'USD', categoria: 'Principal' })
-      toast.success('Ingreso agregado')
+    const desc = prompt('Descripción');
+    const monto = parseFloat(prompt('Monto USD'));
+    const dia = parseInt(prompt('Día'));
+    const mes = parseInt(prompt('Mes (1-12)')) - 1;
+    if (desc && monto && dia && mes >= 0) {
+      addIngreso({ descripcion: desc, monto, moneda: 'USD', dia, mes, id: Date.now() });
+      toast.success('Ingreso agregado');
     }
-  }
+  };
+
+  const handlers = useSwipeable({
+    onSwipedRight: (e) => deleteItem(e.event.target.dataset.id, 'ingresos'),
+  });
 
   return (
-    <div className="p-4">
-      <button onClick={handleAdd} className="btn w-full mb-6 flex items-center justify-center gap-2">
-        <Plus size={24} /> Agregar Ingreso
-      </button>
-
-      {ingresos.map(i => (
-        <div key={i.id} className="card flex justify-between items-center">
+    <div className="p-4" {...handlers}>
+      <button onClick={handleAdd} className="btn w-full mb-4">+ Ingreso</button>
+      {ingresos.map((i) => (
+        <div key={i.id} data-id={i.id} className="card flex justify-between">
           <div>
-            <p className="font-semibold">{i.descripcion}</p>
-            <p className="text-sm text-gray-600">{i.categoria}</p>
+            <p className="font-bold">{i.descripcion}</p>
+            <p>Día {i.dia} - Mes {i.mes + 1}</p>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-xl font-bold text-emerald-600">${i.monto.toFixed(2)}</span>
-            <button onClick={() => deleteIngreso(i.id)}><Trash2 size={20} className="text-red-500" /></button>
+          <div className="flex items-center gap-2">
+            ${i.monto.toFixed(2)}
+            <Trash2 size={20} className="text-red-500" onClick={() => deleteItem(i.id, 'ingresos')} />
           </div>
         </div>
       ))}
-
-      <div className="mt-8 text-center">
-        <p className="text-3xl font-bold text-emerald-600">
-          Total Ingresos: ${ingresos.reduce((s, i) => s + i.monto, 0).toFixed(2)} USD
-        </p>
-      </div>
     </div>
-  )
-}
+  );
+};
+
+export { IncomeTab };
