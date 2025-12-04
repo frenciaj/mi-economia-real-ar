@@ -1,72 +1,42 @@
-import { Plus, Trash2 } from 'lucide-react'
-import { useStore } from '../App'
-import toast from 'react-hot-toast'
+import { Trash2 } from 'lucide-react';
+import { useStore } from '../App';
+import { useSwipeable } from 'react-swipeable';
 
-export function ExpenseTab() {
-  const { gastos, addGasto, deleteGasto, config } = useStore()
+const ExpenseTab = () => {
+  const { gastos, addRecurrentGasto, deleteItem, config } = useStore();
 
   const handleAdd = () => {
-    const desc = prompt('Descripción del gasto')
-    const montoStr = prompt('Monto')
-    const moneda = prompt('Moneda (ARS/USD)', 'ARS').toUpperCase()
-    const aplicarInflacion = confirm('¿Aplicar inflación mensual automática?')
-
-    const monto = parseFloat(montoStr)
-    if (!desc || isNaN(monto)) return
-
-    const gastoBase = {
-      descripcion: desc,
-      monto,
-      moneda,
-      aplicarInflacion,
-      inflacionMensual: config.inflacionDefault
+    const desc = prompt('Descripción');
+    const monto = parseFloat(prompt('Monto'));
+    const moneda = prompt('Moneda (ARS/USD)', 'ARS').toUpperCase();
+    const dia = parseInt(prompt('Día'));
+    const mes = parseInt(prompt('Mes (1-12)')) - 1;
+    if (desc && monto && moneda && dia && mes >= 0) {
+      addRecurrentGasto({ descripcion: desc, monto, moneda, dia, mes, categoria: 'Gasto' });
     }
+  };
 
-    if (aplicarInflacion) {
-      // Genera 12 meses con inflación
-      let montoActual = monto
-      for (let mes = 0; mes < 12; mes++) {
-        const montoUsd = moneda === 'USD' ? montoActual : montoActual / config.cotizDolar
-        addGasto({ ...gastoBase, monto: montoActual, montoUsd, mes: new Date().getMonth() + mes })
-        montoActual *= (1 + config.inflacionDefault / 100)
-      }
-      toast.success('Gasto recurrente creado por 12 meses con inflación')
-    } else {
-      const montoUsd = moneda === 'USD' ? monto : monto / config.cotizDolar
-      addGasto({ ...gastoBase, montoUsd })
-      toast.success('Gasto agregado')
-    }
-  }
-
-  const totalUsd = gastos.reduce((s, g) => s + (g.montoUsd || 0), 0)
+  const handlers = useSwipeable({
+    onSwipedRight: (e) => deleteItem(e.event.target.dataset.id, 'gastos'),
+  });
 
   return (
-    <div className="p-4">
-      <button onClick={handleAdd} className="btn w-full mb-6 flex items-center justify-center gap-2">
-        <Plus size={24} /> Agregar Gasto
-      </button>
-
-      {gastos.map(g => (
-        <div key={g.id} className="card flex justify-between items-center">
+    <div className="p-4" {...handlers}>
+      <button onClick={handleAdd} className="btn w-full mb-4">+ Gasto Recurrente</button>
+      {gastos.map((g) => (
+        <div key={g.id} data-id={g.id} className="card flex justify-between">
           <div>
-            <p className="font-semibold">{g.descripcion}</p>
-            <p className="text-sm text-gray-600">
-              {g.monto.toLocaleString('es-AR')} {g.moneda}
-              {g.aplicarInflacion && ' (inflación aplicada)'}
-            </p>
+            <p className="font-bold">{g.descripcion}</p>
+            <p>Día {g.dia} - Mes {g.mes + 1} - {g.moneda}</p>
           </div>
-          <div className="text-right">
-            <p className="font-bold text-red-600">${g.montoUsd?.toFixed(2) || '—'} USD</p>
-            <button onClick={() => deleteGasto(g.id)}><Trash2 size={18} className="text-red-500 mt-1" /></button>
+          <div className="flex items-center gap-2 text-red-500">
+            ${g.montoUsd.toFixed(2)} USD
+            <Trash2 size= {20} onClick={() => deleteItem(g.id, 'gastos')} />
           </div>
         </div>
       ))}
-
-      <div className="mt-8 text-center">
-        <p className="text-3xl font-bold text-red-600">
-          Total Gastos: ${totalUsd.toFixed(2)} USD
-        </p>
-      </div>
     </div>
-  )
-}
+  );
+};
+
+export { ExpenseTab };
