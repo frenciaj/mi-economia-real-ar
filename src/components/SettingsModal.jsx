@@ -1,27 +1,25 @@
-import { useStore } from '../App'
-import toast from 'react-hot-toast'
+import { useStore } from '../App';
 
-export function SettingsModal({ isOpen, onClose }) {
-  const { config, updateConfig } = useStore()
-
-  if (!isOpen) return null
-
+const SettingsModal = ({ onClose }) => {
+  const { config, updateConfig } = useStore();
   const handleSave = () => {
-    const cotiz = parseFloat(prompt('Cotización del dólar', config.cotizDolar) || config.cotizDolar)
-    const infl = parseFloat(prompt('Inflación mensual %', config.inflacionDefault) || config.inflacionDefault)
-    updateConfig('cotizDolar', cotiz)
-    updateConfig('inflacionDefault', infl)
-    toast.success('Configuración guardada')
-    onClose()
-  }
+    const newCotiz = parseFloat(prompt('Cotización Dólar', config.cotizDolar));
+    const newInfl = parseFloat(prompt('Inflación Mensual %', config.inflacionDefault));
+    updateConfig('cotizDolar', newCotiz);
+    updateConfig('inflacionDefault', newInfl);
+    toast.success('Configuración actualizada – totales recalculados!');
+    onClose();
+  };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={onClose}>
-      <div className="card max-w-sm w-full mx-4" onClick={e => e.stopPropagation()}>
-        <h2 className="text-2xl font-bold mb-6 text-center">Configuración</h2>
-        <button onClick={handleSave} className="btn w-full">Actualizar Cotización e Inflación</button>
-        <button onClick={onClose} className="mt-4 text-gray-500">Cerrar</button>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+      <div className="card w-80">
+        <h3 className="text-lg font-bold mb-4">Configuración</h3>
+        <button onClick={handleSave} className="btn w-full">Guardar Cambios</button>
+        <button onClick={onClose} className="mt-2 text-gray-500">Cancelar</button>
       </div>
     </div>
-  )
-}
+  );
+};
+
+export { SettingsModal };
