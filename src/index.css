@@ -2,7 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .card { @apply bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-2xl shadow-xl p-5 my-3; }
-  .btn { @apply bg-emerald-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg active:scale-95 transition-all; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.card {
+  @apply bg-white/90 dark:bg-slate-800 rounded-xl shadow-md p-4 mb-2;
+}
+
+.btn {
+  @apply bg-emerald-600 text-white px-4 py-2 rounded-lg shadow hover:bg-emerald-700 active:scale-95 transition-all;
 }
